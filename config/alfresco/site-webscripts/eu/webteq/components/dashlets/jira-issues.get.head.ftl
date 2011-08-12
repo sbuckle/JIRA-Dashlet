@@ -1,0 +1,2 @@
+<script type="text/javascript" src="${page.url.context}/res/webteq/components/dashlets/jira-issue-list.js"></script>
+<link rel="stylesheet" type="text/css" href="${page.url.context}/res/webteq/components/dashlets/jira-issue-list.css" />

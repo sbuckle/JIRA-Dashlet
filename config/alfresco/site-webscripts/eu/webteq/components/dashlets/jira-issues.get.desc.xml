@@ -1,0 +1,6 @@
+<webscript>
+   <shortname>My JIRA Issues</shortname>
+   <description>Retrieves a list of open issues belonging to the user</description>
+   <family>dashlet</family>
+   <url>/webteq/components/dashlets/jira-projects</url>
+</webscript>

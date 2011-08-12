@@ -1,0 +1,49 @@
+.my-jira-issues .hide
+{
+	visibility: hidden;
+}
+
+.my-jira-issues .paginator
+{
+	text-align: center;
+}
+
+.my-jira-issues .refresh
+{
+   background-image: url('refresh-icon.png');
+   background-repeat: no-repeat;
+   float: right;
+   height: 16px;
+   left: -8px;
+   position: relative;
+   top: -22px;
+   width: 16px;
+}
+
+.my-jira-issues .refresh a,
+.my-jira-issues .refresh a:active,
+.my-jira-issues .refresh a:hover
+{
+   display: block;
+   height: 16px;
+   text-decoration: none;
+   width: 16px;
+}
+
+.my-jira-issues .body
+{
+	clear: both;
+}
+
+.my-jira-issues .yui-dt table
+{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.my-jira-issues .toolbar div.actions
+{
+	float: right;
+	min-height: 2em;
+	line-height: 2em;
+}

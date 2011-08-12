@@ -1,0 +1,5 @@
+<webscript>
+  <shortname>JIRA Issues Configuration</shortname>
+  <description>Configuration dialog for JIRA issues dashlet</description>
+  <url>/webteq/modules/dashlets/jira-issues-config</url>
+</webscript>

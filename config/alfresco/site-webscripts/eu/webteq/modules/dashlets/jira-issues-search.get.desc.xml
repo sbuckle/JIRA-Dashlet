@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>JIRA Issues Search</shortname>
+  <description>Search for JIRA issues</description>
+  <format default="json">argument</format>
+  <url>/webteq/modules/dashlets/jira-issues-search</url>
+</webscript>

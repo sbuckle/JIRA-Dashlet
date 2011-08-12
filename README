@@ -1,0 +1,27 @@
+JIRA Issue dashlet for Alfresco Share
+====================================
+
+Author: Simon Buckle
+Email:  simon@webteq.eu
+
+This dashlet displays a user's unresolved JIRA issues that are either overdue or are due shortly.
+
+Installation 
+------------
+
+The dashlet has been developed to work on Alfresco 3.4. 
+It has been tested with JIRA 4.4.
+
+A build script is provided and is taken directly from the sample project:
+http://code.google.com/p/share-extras/wiki/SampleProject
+
+See "Building Your Project" to see how to build the dashlet.
+
+Configuration
+-------------
+
+The dashlet defines a custom endpoint (share-config-custom.xml) that is used to connect to JIRA. This will need to modified so that the endpoint url points to REST API of your instance of JIRA. A username and password will also need to be set; the user will need to have the appropriate permissions to be able to access JIRA.
+
+The property 'jira-url' in the configuration file for the dashlet (jira-issues.get.config.xml) will also need to be set to URL of your JIRA instance; this property is used to create a link to the issue within JIRA.
+
+That should be it!
