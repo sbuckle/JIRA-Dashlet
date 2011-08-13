@@ -6,6 +6,7 @@ new Alfresco.dashlet.IssueList("${elem}").setOptions(
   <#if jiraUrl??>
   jiraUrl: "${jiraUrl}",
   </#if>
+  jiraUser: "${(jiraUser!"")?js_string}",
   maxItems: ${maxItems!"100"},
   filters:
   [<#list filters as filter>

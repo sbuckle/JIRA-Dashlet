@@ -2,6 +2,12 @@
    <div class="hd">${msg("label.header")}</div>
    <div class="bd">
       <form id="${args.htmlid}-form" action="" method="POST">
+      	 <div class="yui-gd">
+            <div class="yui-u first"><label for="${args.htmlid}-jiraUser">${msg("label.jiraUsername")}:</label></div>
+            <div class="yui-u" >
+               <input type="text" name="jiraUser" id="${args.htmlid}-jiraUser" />
+            </div>
+         </div>
          <div class="yui-gd">
             <div class="yui-u first"><label for="${args.htmlid}-max-items">${msg("label.resultsPerPage")}:</label></div>
             <div class="yui-u">

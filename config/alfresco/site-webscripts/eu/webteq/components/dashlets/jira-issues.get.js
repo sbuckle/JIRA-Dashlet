@@ -23,4 +23,4 @@ model.filters = filters;
 
 model.maxItems = getConfigProperty("max-items")
 model.jiraUrl = getConfigProperty("jira-url");
-
+model.jiraUser = getConfigProperty("jiraUser", user.name);

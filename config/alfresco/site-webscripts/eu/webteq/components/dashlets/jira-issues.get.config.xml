@@ -1,4 +1,5 @@
 <config>
+	<jiraUser></jiraUser>
 	<max-items>100</max-items>
 	<filters>
 		<filter label="filter.allIssues" value="all"/>

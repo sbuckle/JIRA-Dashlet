@@ -79,6 +79,16 @@
     	   * @default null
     	   */
     	  jiraUrl: null,
+    	  
+    	  /**
+           * JIRA username of the user
+           * 
+           * @property twitterUser
+           * @type string
+           * @default ""
+           */
+    	  jiraUser: "",
+    	  
     	  /**
     	   * @property filters
     	   * @type Array
@@ -185,12 +195,25 @@
                 {
                    fn: function TrainTimes_onConfigPoll_callback(e)
                    {
+                	  this.options.jiraUser = Dom.get(this.configDialog.id + "-jiraUser").value;
                       this.options.maxItems = Dom.get(this.configDialog.id + "-max-items").value;
+                      
                       this.loadData();
                    },
                    scope: this
                 },
-                
+                doSetupFormsValidation:
+                {
+                   fn: function Issues_doSetupForm_callback(form)
+                   {
+                      Dom.get(this.configDialog.id + "-jiraUser").value = this.options.jiraUser;
+
+                      // Search term is mandatory
+                      this.configDialog.form.addValidation(this.configDialog.id + "-jiraUser", Alfresco.forms.validation.mandatory, null, "keyup");
+                      this.configDialog.form.addValidation(this.configDialog.id + "-jiraUser", Alfresco.forms.validation.mandatory, null, "blur");
+                   },
+                   scope: this
+                },
                 doBeforeDialogShow:
                 {
                 	fn: function Issues_beforeDialogShows_callback(form) 
@@ -198,17 +221,12 @@
                 		if (this.initColumns) {
                   		  var columns = this.dataTable.getColumnSet().keys;
                   		  var picker = Dom.get(this.configDialog.id + "-picker");
-                  		  //var template = document.createElement("div");
                   		  var onClickObj = { fn: this.handleButtonClick, obj: this, scope: false };
                   		  
                   		  var column, key, buttonGroup,
                   		  	i, len=columns.length;
                   		  for (i = 0; i < len; i += 1) {
                   			  column = columns[i];
-                  			  // Use the template
-                  			  //var elColumn = template.cloneNode(true);
-                  			  //picker.appendChild(elColumn);
-                  			  
                   			  var checkBtn = new YAHOO.widget.Button({
                   				  type: "checkbox",
                   				  id: this.configDialog.id + "-btn" + i,
@@ -266,13 +284,20 @@
        */
       refresh: function Issues_refesh()
       {
-         var callback = {
-        	 success: this.dataTable.onDataReturnSetRows,
-   			 failure: this.dataTable.onDataReturnSetRows,
-   			 scope: this.dataTable,
-   			 argument: this.dataTable.getState() 
+         var state = this.dataTable.getState(),
+         	request, 
+         	callback;
+         
+         callback = {
+             success: this.dataTable.onDataReturnSetRows,
+       	     failure: this.dataTable.onDataReturnSetRows,
+       	     scope: this.dataTable,
+       	     argument: this.dataTable.getState() 
          };
-         this.dataSource.sendRequest(this.generateRequest(this.dataTable.getState()), callback);
+         
+         request = this.dataTable.get("generateRequest")(state, this.dataTable);
+         
+         this.dataSource.sendRequest(request, callback);
       },
       
       generateRequest: function Issues_generateRequest(state, self)
@@ -298,7 +323,7 @@
        */
       loadData: function Issues_loadData()
       {  
-    	  var issueDataSource = new YAHOO.util.DataSource(Alfresco.constants.URL_SERVICECONTEXT + "/webteq/modules/dashlets/jira-issues-search?assignee=" + encodeURIComponent(Alfresco.constants.USERNAME));
+    	  var issueDataSource = new YAHOO.util.DataSource(Alfresco.constants.URL_SERVICECONTEXT + "/webteq/modules/dashlets/jira-issues-search?assignee=" + encodeURIComponent(this.options.jiraUser));
     	  issueDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
     	  issueDataSource.responseSchema = {
     			  resultsList: "issues",
