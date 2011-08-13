@@ -4,32 +4,13 @@
     * YUI Library aliases
     */
    var Dom = YAHOO.util.Dom,
-      Event = YAHOO.util.Event,
-      CF;
-
-   CF = {
-      settings: {
-    	  filter: "all"
-	  },
-	  /**
-       * Parameter map
-       * 
-       * @property paramMap
-       * @type object
-       */
-      paramMap: {
-    	  "next": encodeURIComponent(">=now(),<=\"5d\""),
-    	  "overdue": encodeURIComponent("<now()"),
-    	  "today": encodeURIComponent("=now()")
-      },
-   };
-   
+      Event = YAHOO.util.Event;
+     
    /**
     * Alfresco Slingshot aliases
     */
    var $html = Alfresco.util.encodeHTML,
       $combine = Alfresco.util.combinePaths;
-
 
    /**
     * Dashboard JIRA Issue List constructor.
@@ -106,6 +87,28 @@
       },
 
       /**
+       * Holds the value of the currently selected filter
+       * from the dropdown menu.
+       * 
+       * @property currentFilterValue
+       * @type string
+       * @default "all"
+       */
+      currentFilterValue: "all",
+      
+      /**
+       * Maintains a map of filter value to parameters to send.
+       * 
+       * @property filterMap
+       * @type Object
+       */
+      filterMap: {
+    	  "next": encodeURIComponent(">=now(),<=\"5d\""),
+    	  "overdue": encodeURIComponent("<now()"),
+    	  "today": encodeURIComponent("=now()")
+      },
+      
+      /**
        * Datatable object
        * 
        * @property dataTable
@@ -147,7 +150,7 @@
     	  
     	  var onMenuClick = function(events, args) {
     		  issueFilterDropDown.set("label", args[1].cfg.getProperty("text"));
-    		  CF.settings.filter = args[1].value;
+    		  this.currentFilterValue = args[1].value;
     		  this.refresh();
     	  };
     	  
@@ -196,9 +199,15 @@
                    fn: function TrainTimes_onConfigPoll_callback(e)
                    {
                 	  this.options.jiraUser = Dom.get(this.configDialog.id + "-jiraUser").value;
-                      this.options.maxItems = Dom.get(this.configDialog.id + "-max-items").value;
+                	  this.options.maxItems = Dom.get(this.configDialog.id + "-max-items").value;
+                	  
+                	  var state = this.dataTable.getState();
+                      if (state.pagination) {
+                    	  state.pagination.rowsPerPage = this.options.maxItems;
+                    	  state.pagination.paginator.set('rowsPerPage', this.options.maxItems);
+                      }
                       
-                      this.loadData();
+                      this.refresh(); // Refresh the data with the new settings
                    },
                    scope: this
                 },
@@ -300,22 +309,6 @@
          this.dataSource.sendRequest(request, callback);
       },
       
-      generateRequest: function Issues_generateRequest(state, self)
-      {
-    	  state = state || { pagination: null, sortedBy: null };
-		  var sort = (state.sortedBy) ? state.sortedBy.key : "duedate";
-		  var dir = (state.sortedBy && state.sortedBy.dir === YAHOO.widget.DataTable.CLASS_DESC) ? "desc" : "asc";
-		  var startAt = (state.pagination) ? state.pagination.recordOffset : 0; 
-		  var duedate = CF.paramMap[CF.settings.filter] || "";
-		  var rowsPerPage = (state.pagination) ? state.pagination.rowsPerPage : 100;
-		  
-		  return "&sort=" + sort +
-		  		 "&dir=" + dir +
-		  		 "&startAt=" + startAt +
-		  		 "&results=" + rowsPerPage +
-		  		 "&duedate=" + duedate;
-      },
-      
       /**
        * Load JIRA issues and render in the dashlet
        * 
@@ -323,7 +316,7 @@
        */
       loadData: function Issues_loadData()
       {  
-    	  var issueDataSource = new YAHOO.util.DataSource(Alfresco.constants.URL_SERVICECONTEXT + "/webteq/modules/dashlets/jira-issues-search?assignee=" + encodeURIComponent(this.options.jiraUser));
+    	  var issueDataSource = new YAHOO.util.DataSource(Alfresco.constants.URL_SERVICECONTEXT + "/webteq/modules/dashlets/jira-issues-search?");
     	  issueDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
     	  issueDataSource.responseSchema = {
     			  resultsList: "issues",
@@ -338,9 +331,27 @@
 				   }  
     	  };
     	  
+    	  var that = this;
+    	  var generateRequest = function (state, self) {
+	   	      state = state || { pagination: null, sortedBy: null };
+	   	      var sort = (state.sortedBy) ? state.sortedBy.key : "duedate";
+	   	      var dir = (state.sortedBy && state.sortedBy.dir === YAHOO.widget.DataTable.CLASS_DESC) ? "desc" : "asc";
+	   	      var startAt = (state.pagination) ? state.pagination.recordOffset : 0; 
+	   	      var duedate = that.filterMap[ that.currentFilterValue ] || "";
+	   	      var rowsPerPage = (state.pagination) ? state.pagination.rowsPerPage : that.options.maxItems;
+	   	      var assignee = encodeURIComponent(that.options.jiraUser);
+	   	      
+	   	      return "&sort=" + sort +
+		  		 	 "&dir=" + dir +
+		  		 	 "&startAt=" + startAt +
+		  		 	 "&results=" + rowsPerPage +
+		  		 	 "&duedate=" + duedate +
+		  		 	 "&assignee=" + assignee;
+    	  };
+    	  
     	  var config = {
-    			  generateRequest: this.generateRequest,
-    			  initialRequest: this.generateRequest(), // Initial request for the first page of data
+    			  generateRequest: generateRequest,
+    			  initialRequest: generateRequest(), // Initial request for the first page of data
     			  dynamicData: true,
     			  paginator: new YAHOO.widget.Paginator({ 
     				  containers: [this.id + "-paginator"], 
