@@ -17,6 +17,8 @@ http://code.google.com/p/share-extras/wiki/SampleProject
 
 To build the dashlet and have the packaged JAR file deployed directly to your Tomcat instance, set the property 'tomcat.home' as appropriate and then run the following command: ant -Dtomcat.home=/Applications/alfresco-3.4.d/tomcat/ clean hotcopy-tomcat-jar
 
+Alternatively, to build an AMP file run the following the command: ant dist-amp
+
 Configuration
 -------------
 
