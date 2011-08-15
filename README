@@ -27,3 +27,8 @@ The dashlet defines a custom endpoint (share-config-custom.xml) that is used to 
 The property 'jira-url' in the configuration file for the dashlet (jira-issues.get.config.xml) will also need to be set to URL of your JIRA instance; this property is used to create a link to the issue within JIRA.
 
 That should be it!
+
+License
+-------
+
+The code is released under the Apache 2.0 license.
