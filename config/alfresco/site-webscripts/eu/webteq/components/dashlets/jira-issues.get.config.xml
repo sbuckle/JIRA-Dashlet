@@ -1,6 +1,8 @@
 <config>
 	<jiraUser></jiraUser>
 	<pageSize>100</pageSize>
+	<!-- Set of columns to display to the user -->
+	<columns>key,duedate,summary</columns>
 	<filters>
 		<filter label="filter.allIssues" value="all"/>
 		<filter label="filter.overdue" value="overdue"/>

@@ -2,12 +2,13 @@
 <script type="text/javascript">//<![CDATA[
 new Alfresco.dashlet.IssueList("${elem}").setOptions(
 {
-  "componentId": "${instance.object.id}",
+  componentId: "${instance.object.id}",
   <#if jiraUrl??>
   jiraUrl: "${jiraUrl}",
   </#if>
   jiraUser: "${(jiraUser!"")?js_string}",
   pageSize: ${pageSize!"100"},
+  columns: [<#list columns as column>"${column?js_string}"<#if column_has_next>,</#if></#list>],
   filters:
   [<#list filters as filter>
    {

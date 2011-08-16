@@ -2,6 +2,7 @@
    <div class="hd">${msg("label.header")}</div>
    <div class="bd">
       <form id="${args.htmlid}-form" action="" method="POST">
+      	 <input type="hidden" name="columns" id="${args.htmlid}-columns" value="" />
       	 <div class="yui-gd">
             <div class="yui-u first"><label for="${args.htmlid}-jiraUser">${msg("label.jiraUsername")}:</label></div>
             <div class="yui-u" >

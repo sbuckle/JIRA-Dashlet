@@ -24,3 +24,6 @@ model.filters = filters;
 model.pageSize = (args.pageSize) ? args.pageSize : getConfigProperty("pageSize");
 model.jiraUrl = getConfigProperty("jiraUrl");
 model.jiraUser = (args.jiraUser) ? args.jiraUser : getConfigProperty("jiraUser", user.name);
+
+var columns = (args.columns) ? args.columns : getConfigProperty("columns");
+model.columns = columns.split(",");

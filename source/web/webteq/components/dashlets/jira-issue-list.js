@@ -43,6 +43,14 @@
       options:
       {
     	  /**
+    	   * The initial set of columns to display to the user.
+    	   * 
+    	   * @property columns
+    	   * @type Array
+    	   */
+    	  columns: [],
+    	  
+    	  /**
            * The component id.
            *
            * @property componentId
@@ -196,7 +204,7 @@
                 actionUrl: actionUrl,
                 onSuccess:
                 {
-                   fn: function TrainTimes_onConfigPoll_callback(e)
+                   fn: function Issues_onSuccess_callback(e)
                    {
                 	  this.options.jiraUser = Dom.get(this.configDialog.id + "-jiraUser").value;
                 	  this.options.pageSize = Dom.get(this.configDialog.id + "-pageSize").value;
@@ -216,8 +224,15 @@
                    fn: function Issues_doSetupForm_callback(form)
                    {
                       Dom.get(this.configDialog.id + "-jiraUser").value = this.options.jiraUser;
-
-                      // Search term is mandatory
+                      var elSelect = Dom.get(this.configDialog.id + "-pageSize");
+                      var i, len = elSelect.options.length;
+                      for (i = 0; i < len; i += 1) {
+                    	  if (elSelect.options[i].value == this.options.pageSize) {
+                    		  elSelect.selectedIndex = i;
+                    	  }
+                      }
+                      
+                      // Username is mandatory
                       this.configDialog.form.addValidation(this.configDialog.id + "-jiraUser", Alfresco.forms.validation.mandatory, null, "keyup");
                       this.configDialog.form.addValidation(this.configDialog.id + "-jiraUser", Alfresco.forms.validation.mandatory, null, "blur");
                    },
@@ -249,6 +264,23 @@
                   		  }
                   		  this.initColumns = false;
                   	  	}
+                	},
+                	scope: this
+                },
+                doBeforeFormSubmit:
+                {
+                	fn: function Issues_beforeFormSubmit(form)
+                	{
+                		var columns = this.dataTable.getColumnSet().keys;
+                		var i, len = columns.length, visible = [], column;
+                		
+                		for (i = 0; i < len; i += 1) {
+                			column = columns[i];
+                			if (!column.hidden) { visible.push(column.getKey()); }
+                		}
+                		
+                		var elInput = Dom.get(this.configDialog.id + "-columns");
+                		elInput.value = visible.join(",");
                 	},
                 	scope: this
                 }
@@ -413,12 +445,20 @@
     		  }
     		  elCell.innerHTML = innerHTML;
     	  };
-    	 
-    	  var columnDefs = [{ key: "key", label: this.msg("th.id"), sortable: false, formatter: this.bind(this.renderKeyField) },
-    	                    { key: "duedate", label: this.msg("th.dueDate"), formatter: formatDate, sortable: true },
-    	                    { key: "summary", label: this.msg("th.summary"), sortable: false },
-    	                    { key: "type", label: this.msg("th.type"), hidden: true, sortable: true },
-    	                    { key: "priority", label: this.msg("th.priority"), hidden: true, sortable: true }];    	  
+    	  
+    	  var isHidden = function (key) {
+    	      var i, len = that.options.columns.length;
+    	      for (i = 0; i < len; i += 1) {
+    	    	  if (key === that.options.columns[i]) { return false; }
+    	      }
+    	      return true;
+    	  };
+    	  
+    	  var columnDefs = [{ key: "key", label: this.msg("th.id"), hidden: isHidden("key"), sortable: false, formatter: this.bind(this.renderKeyField) },
+    	                    { key: "duedate", label: this.msg("th.dueDate"), hidden: isHidden("duedate"), formatter: formatDate, sortable: true },
+    	                    { key: "summary", label: this.msg("th.summary"), hidden: isHidden("summary"), sortable: false },
+    	                    { key: "type", label: this.msg("th.type"), hidden: isHidden("type"), sortable: true },
+    	                    { key: "priority", label: this.msg("th.priority"), hidden: isHidden("priority"), sortable: true }];    	  
     	  
     	  var issueDataTable = new YAHOO.widget.DataTable(this.id + "-body", columnDefs, issueDataSource, config);
     	  issueDataTable.doBeforeLoadData = function(request, response, payload) {
