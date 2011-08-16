@@ -8,7 +8,7 @@
       			<endpoint-url>http://localhost:8090/rest/api/latest</endpoint-url>
       			<identity>declared</identity>
       			<username>admin</username>
-      			<password>admin01</password>
+      			<password>admin</password>
     		</endpoint>
   		</remote>
 	</config>
