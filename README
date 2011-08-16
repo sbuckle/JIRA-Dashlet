@@ -24,7 +24,7 @@ Configuration
 
 The dashlet defines a custom endpoint (share-config-custom.xml) that is used to connect to JIRA. This will need to modified so that the endpoint url points to REST API of your instance of JIRA. A username and password will also need to be set; the user will need to have the appropriate permissions to be able to access JIRA.
 
-The property 'jira-url' in the configuration file for the dashlet (jira-issues.get.config.xml) will also need to be set to URL of your JIRA instance; this property is used to create a link to the issue within JIRA.
+The property 'jiraUrl' in the configuration file for the dashlet (jira-issues.get.config.xml) will also need to be set to URL of your JIRA instance; this property is used to create a link to the issue within JIRA.
 
 That should be it!
 

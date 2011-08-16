@@ -1,11 +1,11 @@
 <config>
 	<jiraUser></jiraUser>
-	<max-items>100</max-items>
+	<pageSize>100</pageSize>
 	<filters>
 		<filter label="filter.allIssues" value="all"/>
 		<filter label="filter.overdue" value="overdue"/>
 		<filter label="filter.dueToday" value="today"/>
 		<filter label="filter.dueNextFiveDays" value="next"/>
 	</filters>
-	<jira-url>http://localhost:8090</jira-url>
+	<jiraUrl>http://localhost:8090</jiraUrl>
 </config>

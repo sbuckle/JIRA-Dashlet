@@ -21,6 +21,6 @@ for each(var filter in scriptConfig..filter) {
 }
 model.filters = filters;
 
-model.maxItems = getConfigProperty("max-items")
-model.jiraUrl = getConfigProperty("jira-url");
-model.jiraUser = getConfigProperty("jiraUser", user.name);
+model.pageSize = (args.pageSize) ? args.pageSize : getConfigProperty("pageSize");
+model.jiraUrl = getConfigProperty("jiraUrl");
+model.jiraUser = (args.jiraUser) ? args.jiraUser : getConfigProperty("jiraUser", user.name);

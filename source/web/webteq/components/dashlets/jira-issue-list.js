@@ -79,11 +79,11 @@
     	  /**
     	   * Number of issues to display at any one time
     	   *
-    	   * @property maxItems
+    	   * @property pageSize
     	   * @type int
     	   * @default 100
     	   */
-    	  maxItems: 100
+    	  pageSize: 100
       },
 
       /**
@@ -199,12 +199,12 @@
                    fn: function TrainTimes_onConfigPoll_callback(e)
                    {
                 	  this.options.jiraUser = Dom.get(this.configDialog.id + "-jiraUser").value;
-                	  this.options.maxItems = Dom.get(this.configDialog.id + "-max-items").value;
+                	  this.options.pageSize = Dom.get(this.configDialog.id + "-pageSize").value;
                 	  
                 	  var state = this.dataTable.getState();
                       if (state.pagination) {
-                    	  state.pagination.rowsPerPage = this.options.maxItems;
-                    	  state.pagination.paginator.set('rowsPerPage', this.options.maxItems);
+                    	  state.pagination.rowsPerPage = this.options.pageSize;
+                    	  state.pagination.paginator.set('rowsPerPage', this.options.pageSize);
                       }
                       
                       this.refresh(); // Refresh the data with the new settings
@@ -338,7 +338,7 @@
 	   	      var dir = (state.sortedBy && state.sortedBy.dir === YAHOO.widget.DataTable.CLASS_DESC) ? "desc" : "asc";
 	   	      var startAt = (state.pagination) ? state.pagination.recordOffset : 0; 
 	   	      var duedate = that.filterMap[ that.currentFilterValue ] || "";
-	   	      var rowsPerPage = (state.pagination) ? state.pagination.rowsPerPage : that.options.maxItems;
+	   	      var rowsPerPage = (state.pagination) ? state.pagination.rowsPerPage : that.options.pageSize;
 	   	      var assignee = encodeURIComponent(that.options.jiraUser);
 	   	      
 	   	      return "&sort=" + sort +
@@ -355,7 +355,7 @@
     			  dynamicData: true,
     			  paginator: new YAHOO.widget.Paginator({ 
     				  containers: [this.id + "-paginator"], 
-    				  rowsPerPage: this.options.maxItems,
+    				  rowsPerPage: this.options.pageSize,
     				  template : this.msg("pagination.template")
     			  }),
     			  sortedBy : {key:"duedate", dir:YAHOO.widget.DataTable.CLASS_ASC},
