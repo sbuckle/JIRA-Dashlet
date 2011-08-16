@@ -338,6 +338,7 @@
          
          request = this.dataTable.get("generateRequest")(state, this.dataTable);
          
+         this.dataTable.showTableMessage(this.dataTable.get("MSG_LOADING"));
          this.dataSource.sendRequest(request, callback);
       },
       
