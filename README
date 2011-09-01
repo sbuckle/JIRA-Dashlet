@@ -10,7 +10,7 @@ Installation
 ------------
 
 The dashlet has been developed to work on Alfresco 3.4. 
-It has been tested with JIRA 4.4.
+The JIRA REST API is only available in JIRA 4.2 and later.
 
 A build script is provided and is taken directly from the sample project:
 http://code.google.com/p/share-extras/wiki/SampleProject
